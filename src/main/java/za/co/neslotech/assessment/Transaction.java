@@ -9,7 +9,13 @@ public class Transaction {
     private double amount;
     private LocalDateTime timestamp;
 
-  
+    public Transaction(String transactionId, Account sourceAccount, Account destinationAccount, double amount) {
+        this.transactionId = transactionId;
+        this.sourceAccount = sourceAccount;
+        this.destinationAccount = destinationAccount;
+        this.amount = amount;
+        this.timestamp = LocalDateTime.now();
+    }
 
     // Getters and setters
     public String getTransactionId() {
