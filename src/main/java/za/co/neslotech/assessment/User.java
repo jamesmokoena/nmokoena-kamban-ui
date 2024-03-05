@@ -1,6 +1,7 @@
 package za.co.neslotech.assessment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class User {
