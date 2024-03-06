@@ -8,11 +8,25 @@ public class Account {
     private Currency currency;
     private double balance;
 
-    public Account(String accountId, Currency currency, double balance) {
+    public Account(String accountId, Currency currency) {
         this.accountId = accountId;
         this.currency = currency;
-        this.balance = balance;
+        this.balance = 0.0;
     }
+
+    public boolean withdraw(double amount) {
+        if (this.balance >= amount) {
+            this.balance -= amount;
+            return true; // Withdrawal successful
+        } else {
+            return false; // Insufficient balance
+        }
+    }
+    public void deposit(double amount) {
+        this.balance += amount;
+    }
+
+
 
     // Method to perform a transfer from this account to another account
     public void transfer(Account destinationAccount, double amount, List<ExchangeRate> exchangeRates) {
@@ -23,7 +37,7 @@ public class Account {
                 this.balance -= amount;
                 destinationAccount.balance += amount;
                 // Create and persist transaction
-                Transaction transaction = new Transaction("12345", this, destinationAccount, amount);
+                Transaction transaction = new Transaction("12345", this, destinationAccount, amount,currency);
                 // Persist transaction logic
             } else {
                 System.out.println("Insufficient funds.");
@@ -35,7 +49,7 @@ public class Account {
                 this.balance -= convertedAmount;
                 destinationAccount.balance += amount;
                 // Create and persist transaction
-                Transaction transaction = new Transaction("12345", this, destinationAccount, amount);
+                Transaction transaction = new Transaction("12345", this, destinationAccount, amount,currency);
                 // Persist transaction logic
             } else {
                 System.out.println("Insufficient funds after currency conversion.");
@@ -44,7 +58,7 @@ public class Account {
 
     }
 
-    private double convertCurrency(double amount, Currency targetCurrency, List<ExchangeRate> exchangeRates) {
+    public double convertCurrency(double amount, Currency targetCurrency, List<ExchangeRate> exchangeRates) {
         String sourceCurrencyCode = this.currency.getCurrencyCode();
         for (ExchangeRate rate : exchangeRates) {
             if(rate.getBaseCurrency().equals(sourceCurrencyCode) &&

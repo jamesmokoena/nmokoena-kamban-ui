@@ -1,5 +1,6 @@
 package za.co.neslotech.assessment;
-import java.time.LocalDateTime;
+
+import java.util.Currency;
 
 
 public class Transaction {
@@ -7,17 +8,41 @@ public class Transaction {
     private Account sourceAccount;
     private Account destinationAccount;
     private double amount;
-    private LocalDateTime timestamp;
+    private Currency currency;
 
-    public Transaction(String transactionId, Account sourceAccount, Account destinationAccount, double amount) {
+
+    public Transaction(String transactionId, Account sourceAccount, Account destinationAccount, double amount, Currency currency) {
         this.transactionId = transactionId;
         this.sourceAccount = sourceAccount;
         this.destinationAccount = destinationAccount;
         this.amount = amount;
-        this.timestamp = LocalDateTime.now();
+        this.currency = currency;
+
     }
 
-    // Getters and setters
+    public boolean execute() {
+        // Check if source account has sufficient balance
+        if (sourceAccount.getBalance() >= amount) {
+            // Deduct amount from source account
+            sourceAccount.withdraw(amount);
+
+            // Convert amount to destination account currency if necessary
+            if (!sourceAccount.getCurrency().equals(destinationAccount.getCurrency())) {
+                double convertedAmount = sourceAccount.convertCurrency(amount, destinationAccount.getCurrency(), null);
+                destinationAccount.deposit(convertedAmount);
+            } else {
+                // Deposit original amount to destination account
+                destinationAccount.deposit(amount);
+            }
+
+            return true; // Transaction successful
+        } else {
+            return false; // Insufficient balance
+        }
+    }
+
+
+        // Getters and setters
     public String getTransactionId() {
         return transactionId;
     }
@@ -50,11 +75,6 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
+
 }
