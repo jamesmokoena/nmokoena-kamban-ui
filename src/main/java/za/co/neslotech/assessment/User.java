@@ -1,20 +1,19 @@
 package za.co.neslotech.assessment;
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class User {
     private String userId;
     private String name;
+    private String country;
     private List<Account> accounts;
 
-    public User(String userId, String name) {
+    public User(String userId, String name, String country) {
         this.userId = userId;
         this.name = name;
+        this.country = country;
         this.accounts = new ArrayList<>();
     }
-
 
     public void addAccount(Account account) {
         accounts.add(account);
@@ -37,6 +36,14 @@ public class User {
         this.name = name;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public List<Account> getAccounts() {
         return accounts;
     }
@@ -45,4 +52,3 @@ public class User {
         this.accounts = accounts;
     }
 }
-
