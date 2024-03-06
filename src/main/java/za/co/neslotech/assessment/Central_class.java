@@ -5,6 +5,7 @@ import java.util.Locale;
 
 public class Central_class{
     public static void main(String[] args) {
+
         // Create some sample users
         User user1 = new User("1", "Alice", "USA");
         User user2 = new User("2", "Bob", "UK");

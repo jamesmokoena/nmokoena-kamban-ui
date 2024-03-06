@@ -2,6 +2,7 @@ package za.co.neslotech.assessment;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
@@ -10,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class APIIntegration {
@@ -40,8 +42,21 @@ public class APIIntegration {
                 exchangeRates.put(currencyCode, rate);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error fetching exchange rates from API: " + e.getMessage());
+        } catch (JsonParseException e) {
+            System.err.println("Error parsing JSON response: " + e.getMessage());
         }
         return exchangeRates;
+    }
+
+    public Map<String, Double> updateExchangeRatesFromFile(String filePath) {
+        CSVFileParser parser = new CSVFileParser();
+        List<ExchangeRate> exchangeRates = parser.parse(filePath);
+        // Convert List<ExchangeRate> to Map<String, Double>
+        Map<String, Double> ratesMap = new HashMap<>();
+        for (ExchangeRate rate : exchangeRates) {
+            ratesMap.put(rate.getBaseCurrency() + "_" + rate.getTargetCurrency(), rate.getRate());
+        }
+        return ratesMap;
     }
 }

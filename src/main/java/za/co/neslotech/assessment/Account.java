@@ -2,6 +2,7 @@ package za.co.neslotech.assessment;
 
 import java.util.List;
 import java.util.Currency;
+import java.util.Map;
 
 public class Account {
     private String accountId;
@@ -61,15 +62,22 @@ public class Account {
     }
 
     public double convertCurrency(double amount, Currency targetCurrency, List<ExchangeRate> exchangeRates) {
-        String sourceCurrencyCode = this.currency.getCurrencyCode();
-        for (ExchangeRate rate : exchangeRates) {
-            if(rate.getBaseCurrency().equals(sourceCurrencyCode) &&
-                    rate.getTargetCurrency().equals(targetCurrency.getCurrencyCode())) {
-                return amount * rate.getRate();
-            }
+        if (this.currency.equals(targetCurrency)) {
+            return amount; // No need for conversion if currencies are the same
         }
-        // If no exchange rate found, return -1 indicating failure
-        return -1;
+
+        // Retrieve exchange rate from API
+        APIIntegration exchangeRateAPI = new APIIntegration();
+        Map<String, Double> latestRates = exchangeRateAPI.getExchangeRates();
+
+        // Find exchange rate for target currency
+        Double exchangeRate = latestRates.get(targetCurrency.getCurrencyCode());
+        if (exchangeRate != null) {
+            return amount * exchangeRate;
+        } else {
+            System.out.println("Exchange rate not available for conversion.");
+            return -1; // Indicate failure
+        }
     }
 
     // Getters and setters
