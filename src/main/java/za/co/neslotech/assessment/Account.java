@@ -8,10 +8,12 @@ public class Account {
     private Currency currency;
     private double balance;
 
-    public Account(String accountId, Currency currency) {
+
+    public Account(String accountId, Currency currency, double balance) {
         this.accountId = accountId;
         this.currency = currency;
-        this.balance = 0.0;
+        this.balance = balance;
+
     }
 
     public boolean withdraw(double amount) {

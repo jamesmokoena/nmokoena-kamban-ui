@@ -15,6 +15,9 @@ public class User {
         this.accounts = new ArrayList<>();
     }
 
+
+
+
     public void addAccount(Account account) {
         accounts.add(account);
     }
